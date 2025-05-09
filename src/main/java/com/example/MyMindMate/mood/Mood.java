@@ -1,10 +1,19 @@
 package com.example.MyMindMate.mood;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Table(name = "moods")
 public class Mood {
 
     @Id
@@ -14,8 +23,12 @@ public class Mood {
     @ManyToOne
     private MoodType moodType;
 
+    @Column(nullable = false)
     private Long userId;
+
     private String reason;
+
+    @Column(name = "recorded_at", nullable = false)
     private LocalDateTime recordedAt;
 }
 
