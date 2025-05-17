@@ -1,0 +1,49 @@
+#spring.datasource.url=jdbc:h2:mem:testdb
+#spring.datasource.driver-class-name=org.h2.Driver
+#spring.datasource.username=sa
+#spring.datasource.password=
+#spring.datasource.generate-unique-name=false
+#
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.show-sql=true
+#spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+#
+#spring.h2.console.enabled=true
+#spring.h2.console.path=/h2-console
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2     # H2 ??? ?? URL? ???? ?
+  datasource:
+    url: jdbc:h2:mem:testdb  # JDBC URL? ?? ???? ??? ??? ??
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    generate-unique-name: false
+  jpa:
+    hibernate:
+      ddl-auto: update      # ?? ??! (??? ?? ?? ? ?? ??)
+    show-sql: true          # SQL ?? ?? ??
+    properties:
+      hibernate:
+        format_sql: true
+    database-platform: org.hibernate.dialect.H2Dialect
+  sql:
+    init:
+# schema.sql ??? ????? ??, ?????? ?? ? DB? ???? ???? ????
+      schema-locations: classpath*:db/h2/schema.sql
+#
+      data-locations: classpath*:db/h2/data.sql
+logging:
+  level:
+    org:
+      springframework:
+        jdbc:
+          core: TRACE
+      hibernate:
+        SQL: DEBUG                 # ?? ?? ???
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE   # ?? ??? ? ??
