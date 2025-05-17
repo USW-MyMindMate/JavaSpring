@@ -1,5 +1,6 @@
 package com.example.MyMindMate.member.domain;
 
+import com.example.MyMindMate.email.domain.EmailToken;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,34 +10,42 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Table(name = "user_table")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="ACCOUNT", nullable = false, updatable = false, unique = true)
+    @Column(name = "ACCOUNT", updatable = false, unique = true)
     private String account;
 
+    @Column(name = "Email")
+    private String email;
+
     @Setter
-    @Column(name="PASSWORD", nullable = false)
+    @Column(name = "PASSWORD")
     private String password;
 
     @Setter
-    @Column(name = "role", nullable = false)
+    @Column(name = "role")
     private String role;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
-    private User parent;  // 부모 User와의 관계
-
-    @Column(name = "fcmToken", nullable = false)
-    private String fcmToken;
+    private User parent;
 
     @OneToMany(mappedBy = "user")
-    private List<ChildProfile> childProfiles;  // 자녀 프로필과의 관계
+    private List<ChildProfile> childProfiles;
 
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    private EmailToken emailToken;
 
+    // Builder용 생성자
+    @Builder
+    public User(String account, String email, String password, String role, String token) {
+        this.account = account;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
-
