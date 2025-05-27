@@ -2,10 +2,16 @@ package com.example.MyMindMate.member.domain;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ChildProfile {
 
     @Id
