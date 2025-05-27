@@ -1,4 +1,4 @@
-package com.example.MyMindMate.config;
+ package com.example.MyMindMate.config;
 
 import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.UserRepository;
@@ -16,9 +16,9 @@ public class DataInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
         User user = User.builder()
                 .account("testuser")
+                .email("test@naver.com")
                 .password("1234")
-                .role("CHILD")
-                .fcmToken("abc123fcm")
+                .role("PARENT")
                 .build();
 
         userRepository.save(user);
