@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -81,6 +82,12 @@ public class UserService {
         emailTokenRepository.delete(emailToken);
         log.info("회원가입 완료 회원 이메일 토큰 삭제:{}, {}", user.getAccount(), user.getEmail());
 
+    }
+
+    // parent_id로 자식 User 찾기
+    public List<User> getChildsByParentId (Long parentId){
+        List<User> childs = userRepository.findByParentId(parentId);
+        return childs;
     }
 
 }

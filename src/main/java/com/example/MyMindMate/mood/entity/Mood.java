@@ -1,25 +1,30 @@
-package com.example.MyMindMate.routine;
+package com.example.MyMindMate.mood.entity;
 
 import com.example.MyMindMate.member.domain.User;
+import com.example.MyMindMate.mood.dto.MoodTypeName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "routines")
-public class Routine {
+@Table(name = "moods")
+public class Mood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name", nullable = false)
+    private MoodTypeName moodTypeName;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -29,12 +34,10 @@ public class Routine {
     @JoinColumn(name = "created_by", referencedColumnName = "id")
     private User parent;
 
-    @Column(nullable = false)
-    private String title;
+    //@Column(columnDefinition = "TEXT")
+    private String reason;
 
-    @Column(name = "day_of_week", nullable = false)
-    private String dayOfWeek;
-
-    @Column(nullable = false)
-    private boolean isCompleted;
+    @Column(name = "recorded_at", nullable = false)
+    private LocalDateTime recordedAt;
 }
+

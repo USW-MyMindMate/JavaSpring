@@ -18,4 +18,5 @@ public class UserDto {
     private String role;
     private Long parentId;  // 부모의 id만 가져옴
     private List<ChildProfileDto> childProfiles;  // 자녀 프로필 리스트
+
 }

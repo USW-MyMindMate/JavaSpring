@@ -1,5 +1,6 @@
-package com.example.MyMindMate.mood;
+package com.example.MyMindMate.mood.entity;
 
+import com.example.MyMindMate.mood.dto.MoodTypeName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,9 +19,11 @@ public class MoodRecommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private MoodType moodType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name")
+    private MoodTypeName moodTypeName;
 
     @ManyToOne
+    @JoinColumn(name = "activity_id")
     private Activity activity;
 }

@@ -1,6 +1,5 @@
 package com.example.MyMindMate.member.domain;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.example.MyMindMate.member.open.api;
 
 import com.example.MyMindMate.global.ApiResponse;
-import com.example.MyMindMate.member.dto.SignUpRequest;
+
 import com.example.MyMindMate.member.dto.UserDto;
 import com.example.MyMindMate.member.open.service.UserService;
 import com.example.MyMindMate.email.domain.EmailToken;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.desktop.AboutHandler;
 import java.util.UUID;
 
 //@Slf4j
