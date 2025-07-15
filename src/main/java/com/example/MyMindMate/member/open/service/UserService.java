@@ -8,13 +8,15 @@ import com.example.MyMindMate.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import javax.security.auth.login.AccountException;
 import java.util.Optional;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -26,7 +28,7 @@ public class UserService {
 
         // 이메일 아직 적지 X -> 아이디 중복 먼저 누를 때
         if(emailToken == null){
-            throw new IllegalStateException("이메일 인증 토큰이 존재하지 않습니다. 이메일을 먼저 적어주세요");
+            throw new IllegalStateException("이메일 인증이 완료되지 않았습니다.");
         }
 
         // 이메일 인증 링크 누르지 X -> 아이디 중복 누를 때
@@ -40,7 +42,7 @@ public class UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            log.info("이미 존재하는 회원 이메일: {}", user.getEmail());
+            log.info("이미 존재하는 회원 아이디: {}", user.getAccount());
 
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
@@ -81,6 +83,21 @@ public class UserService {
         emailTokenRepository.delete(emailToken);
         log.info("회원가입 완료 회원 이메일 토큰 삭제:{}, {}", user.getAccount(), user.getEmail());
 
+    }
+
+    public UserDto login(final String loginId, final String password) {
+
+        // 회원 유무 확인 후 비번 일치 확인
+        User user = userRepository.findByAccount(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 아이디입니다."));
+
+        if (!password.equals(user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        UserDto userDto = UserDto.loginResponse(user);
+
+        return userDto;
     }
 
 }
