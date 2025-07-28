@@ -26,7 +26,7 @@ public class UserService {
 
         // 이메일 아직 적지 X -> 아이디 중복 먼저 누를 때
         if(emailToken == null){
-            throw new IllegalStateException("이메일 인증 토큰이 존재하지 않습니다. 이메일을 먼저 적어주세요");
+            throw new IllegalStateException("이메일 인증 먼저 진행해주세요.");
         }
 
         // 이메일 인증 링크 누르지 X -> 아이디 중복 누를 때
@@ -40,7 +40,7 @@ public class UserService {
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            log.info("이미 존재하는 회원 이메일: {}", user.getEmail());
+            log.info("이미 존재하는 회원 아이디: {}", user.getAccount());
 
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
@@ -51,7 +51,7 @@ public class UserService {
         EmailToken emailToken = emailTokenRepository.findByEmail(userDTO.getEmail());
         // 이메일 아직 적지 X -> 아이디 중복 먼저 누를 때
         if(emailToken == null){
-            throw new IllegalStateException("이메일 인증 토큰이 존재하지 않습니다. 이메일을 먼저 적어주세요");
+            throw new IllegalStateException("이메일 인증 먼저 진행해주세요.");
         }
 
         if(userDTO.getAccount() == null){
@@ -59,11 +59,10 @@ public class UserService {
         }
 
 
-
         if(emailToken.isVerified() == false){
-            log.info("이메일 인증 먼저 해주세요");
+            log.info("이메일로 접속해 인증 링크를 눌러주세요.");
 
-            throw new IllegalStateException("이메일 인증을 먼저 해주세요.");
+            throw new IllegalStateException("이메일로 접속해 인증 링크를 눌러주세요.");
         }
 
         User user = User.builder()

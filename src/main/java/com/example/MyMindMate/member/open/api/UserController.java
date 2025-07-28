@@ -35,8 +35,9 @@ public class UserController {
 
     @GetMapping("/verify")
     public ResponseEntity<ApiResponse> verifyEmail(@RequestParam("uuid") UUID tokenuuid) {
-        emailTokenService.verifyToken(tokenuuid);
-        return ResponseEntity.ok(new ApiResponse("이메일 인증이 완료되었습니다."));
+
+        EmailToken emailToken = emailTokenService.verifyToken(tokenuuid);
+        return ResponseEntity.ok(new ApiResponse("이메일 인증이 완료되었습니다.", emailToken.getTokenuuid()));
     }
 
     @GetMapping("/check-account")

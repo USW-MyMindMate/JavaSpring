@@ -22,6 +22,17 @@ public class DataInit implements CommandLineRunner {
                 .build();
 
         userRepository.save(user);
+
+        User user2 = User.builder()
+                .account("jjeong")
+                .email("ask796629@naver.com")
+                .password("7777")
+                .role("PARENT")
+                .build();
+
+        userRepository.save(user2);
+
+
     }
 }
 

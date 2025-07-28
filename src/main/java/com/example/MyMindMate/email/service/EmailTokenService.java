@@ -81,7 +81,7 @@ public class EmailTokenService {
     }
 
     // 인증 확인 처리
-    public boolean verifyToken(UUID tokenuuid) {
+    public EmailToken verifyToken(UUID tokenuuid) {
 
         EmailToken emailToken = emailTokenRepository.findByTokenuuid(tokenuuid);
 
@@ -103,7 +103,7 @@ public class EmailTokenService {
         emailToken.setVerified(true);
         emailTokenRepository.save(emailToken);
 
-        return true;
+        return emailToken;
     }
 
 }
