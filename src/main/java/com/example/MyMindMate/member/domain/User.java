@@ -48,4 +48,9 @@ public class User {
         this.password = password;
         this.role = role;
     }
+
+    //datainit으로 인헤 추가
+    public void setParent(User parent) {
+        this.parent = parent;
+    }
 }
