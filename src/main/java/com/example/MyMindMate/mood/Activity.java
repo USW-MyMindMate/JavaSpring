@@ -21,6 +21,8 @@ public class Activity {
     @Column(nullable = false)
     private String activity;
 
-    @ManyToOne
-    private MoodType moodType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name", nullable = false)
+    private MoodTypeName moodTypeName;
 }
+
