@@ -18,8 +18,9 @@ public class MoodRecommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private MoodType moodType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name", nullable = false)
+    private MoodTypeName moodTypeName;
 
     @ManyToOne
     private Activity activity;

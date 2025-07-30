@@ -20,8 +20,8 @@ public class Mood {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private MoodType moodType;
+    //@ManyToOne
+    //private MoodType moodType;
 
     @Column(nullable = false)
     private Long userId;
