@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +20,9 @@ public class RoutineLogService {
 
     @Transactional
     public RoutineLogResponse createOrUpdateLog(RoutineLogRequest request) {
-        System.out.println("📥 전달받은 request.isCompleted: " + request.isCompleted());
+        if (request.getRoutineId() == null || request.getUserId() == null) {
+            throw new IllegalArgumentException("routineId 또는 userId가 누락되었습니다.");
+        }
 
         RoutineLog log = routineLogRepository
                 .findByRoutineIdAndUserId(request.getRoutineId(), request.getUserId())
@@ -33,16 +36,18 @@ public class RoutineLogService {
                     .build();
             log = routineLogRepository.save(log);
         } else {
-            System.out.println("🔁 기존 로그 상태 (수정 전): " + log.isCompleted());
             log.update(request.isCompleted());
             log = routineLogRepository.save(log);
-            System.out.println("✅ 수정 완료 상태: " + log.isCompleted());
         }
 
         return toResponse(log);
     }
 
     public List<RoutineLogResponse> getLogsByUserId(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("userId는 필수입니다.");
+        }
+
         return routineLogRepository.findByUserId(userId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
