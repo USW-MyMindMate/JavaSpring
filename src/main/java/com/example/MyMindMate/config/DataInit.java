@@ -14,14 +14,14 @@ public class DataInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        User user = User.builder()
+        User user1 = User.builder()
                 .account("testuser")
                 .email("test@naver.com")
                 .password("1234")
                 .role("PARENT")
                 .build();
 
-        userRepository.save(user);
+        userRepository.save(user1);
 
         User user2 = User.builder()
                 .account("jjeong")
@@ -32,8 +32,9 @@ public class DataInit implements CommandLineRunner {
 
         userRepository.save(user2);
 
-
     }
+
+
 }
 
 // DataInit : 서버가 시작될 때, 테스트용 데이터를 DB에 자동으로 저장하는 역할

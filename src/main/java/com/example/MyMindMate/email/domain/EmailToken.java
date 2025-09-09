@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -25,13 +26,10 @@ public class EmailToken {
     @Column(length = 36)
     private UUID tokenuuid; // ✅ String이 아니라 UUID 타입으로!
 
-
     private LocalDateTime expirationDate ;
 
-    @Setter
     private boolean verified; //✅ 인증 여부
 
-    @Setter
     private boolean expired;
 
     @Column(nullable = false)

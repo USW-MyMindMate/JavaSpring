@@ -28,7 +28,7 @@ public class EmailTokenService {
     private final EmailTokenRepository emailTokenRepository;
     private final JavaMailSender javaMailSender;
     private final EmailConfig emailConfig;
-    private static final long EXPIRATION_MINUTES = 5L;
+    private static final long EXPIRATION_MINUTES = 1L;
     private final UserRepository userRepository;
 
     @Async
@@ -105,6 +105,55 @@ public class EmailTokenService {
 
         return emailToken;
     }
+
+    public EmailToken recreateEmailToken(String email) throws MessagingException {
+        EmailToken oldToken = emailTokenRepository.findByEmail(email);
+        if (oldToken == null) {
+            throw new IllegalStateException("이메일에 해당하는 토큰이 없습니다.");
+        }
+
+        // 2. 기존 토큰 만료 여부 확인
+        if (oldToken.getExpirationDate().isAfter(LocalDateTime.now())) {
+            throw new IllegalStateException("현재 토큰이 아직 유효합니다. 만료된 후 재요청하세요.");
+        }
+
+        if (oldToken != null) {
+            // 2. 기존 토큰 삭제
+            emailTokenRepository.delete(oldToken);
+        }
+
+        // 새로운 UUID 가진 새 토큰 생성
+        EmailToken newToken = EmailToken.builder()
+                .email(email)
+                .expirationDate(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES))
+                .verified(false)
+                .expired(false)
+                .build();
+
+        return emailTokenRepository.save(newToken);
+    }
+
+    public EmailToken updateEmailToken(UUID oldUuid) {
+        EmailToken oldToken = emailTokenRepository.findByTokenuuid(oldUuid);
+        if (oldToken == null) {
+            throw new IllegalStateException("토큰을 찾을 수 없습니다.");
+        }
+
+        // 기존 토큰을 새로운 UUID와 만료 시간으로 갱신
+        oldToken.setTokenuuid(UUID.randomUUID()); // 새로운 UUID 생성
+        oldToken.setExpirationDate(LocalDateTime.now().plusMinutes(EXPIRATION_MINUTES));
+        oldToken.setExpired(false);
+        oldToken.setVerified(false);
+
+        return emailTokenRepository.save(oldToken);
+    }
+
+//    // 재인증 토큰 발급 (메일 재전송)
+//    public String recreateEmailToken(UUID oldUuid) throws MessagingException {
+//        EmailToken newToken = updateEmailToken(oldUuid);
+//        createVerifyLink(newToken);  // 새 링크 이메일 전송
+//        return newToken.getTokenuuid().toString();
+//    }
 
 }
 

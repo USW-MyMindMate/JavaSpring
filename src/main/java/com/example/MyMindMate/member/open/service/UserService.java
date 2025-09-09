@@ -44,26 +44,46 @@ public class UserService {
 
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
+
     }
 
-    public void signUp(UserDto userDTO){
+    public void validatePasswords(String password, String passwordConfirm) {
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("비밀번호를 입력해주세요.");
+        }
+        if (!password.equals(passwordConfirm)) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        log.info("비밀번호 검증 통과");
+    }
+
+    public void signUp(UserDto userDTO, String passwordConfirm){
 
         EmailToken emailToken = emailTokenRepository.findByEmail(userDTO.getEmail());
+
         // 이메일 아직 적지 X -> 아이디 중복 먼저 누를 때
         if(emailToken == null){
             throw new IllegalStateException("이메일 인증 먼저 진행해주세요.");
         }
 
-        if(userDTO.getAccount() == null){
-            throw new IllegalStateException("아이디를 입력해주세요.");
-        }
-
-
+        // 이메일 인증 링크 누르지 X -> 아이디 중복 누를 때
         if(emailToken.isVerified() == false){
-            log.info("이메일로 접속해 인증 링크를 눌러주세요.");
+            log.info("이메일 인증 절차를 먼저 처리해주세요");
 
-            throw new IllegalStateException("이메일로 접속해 인증 링크를 눌러주세요.");
+            throw new IllegalStateException("먼저 이메일로 접속해 인증 링크를 눌러주세요.");
         }
+
+        Optional<User> userOptional = userRepository.findByAccount(userDTO.getAccount());
+
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            log.info("이미 존재하는 회원 아이디: {}", user.getAccount());
+
+            throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
+        }
+
+        // 3. 비밀번호 검증
+        validatePasswords(userDTO.getPassword(), passwordConfirm);
 
         User user = User.builder()
                 .account(userDTO.getAccount())
@@ -81,5 +101,7 @@ public class UserService {
         log.info("회원가입 완료 회원 이메일 토큰 삭제:{}, {}", user.getAccount(), user.getEmail());
 
     }
+
+
 
 }

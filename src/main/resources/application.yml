@@ -2,7 +2,7 @@ spring:
 #application:
 #name: MyMindMate
   profiles:
-    active: local  #prod, mysql
+    active: local #prod #local  , mysql
 
   # smtp
   mail:
@@ -17,3 +17,9 @@ spring:
           ssl:
             enable: true
             trust: smtp.naver.com
+
+server:
+  port: 8080
+  servlet:
+    session:
+      timeout: 30m  # 사용자 활동 할 때마다 세션 시간 갱신
