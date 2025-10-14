@@ -38,6 +38,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
 
+
 	// fcm
 	implementation 'com.google.firebase:firebase-admin:9.1.1'
 
@@ -45,6 +46,7 @@ dependencies {
 	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	// Spring 3.2+ RestClient 사용 시
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 }
 
 tasks.named('test') {

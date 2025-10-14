@@ -26,6 +26,12 @@ public class Mood {
     @Column(nullable = false)
     private Long userId;
 
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name", nullable = false)
+    private MoodTypeName moodTypeName;
+
+
     private String reason;
 
     @Column(name = "recorded_at", nullable = false)
