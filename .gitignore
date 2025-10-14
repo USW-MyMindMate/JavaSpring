@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+##fcm
+src/main/resources/firebase/
+*.json
