@@ -11,8 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MoodRecordRequest {
-    //private Long moodTypeId;
-    private MoodTypeName moodTypeName;
-    private String reason;
+
     private Long userId;
+    private String reason;
+    private MoodTypeName moodTypeName; // 감정 이름 (선택적으로 추가 가능)
+
 }

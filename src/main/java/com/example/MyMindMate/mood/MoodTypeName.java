@@ -10,3 +10,4 @@ public enum MoodTypeName {
         return this == SAD || this == ANGRY || this == ANXIOUS;
     }
 }
+
