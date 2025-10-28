@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.List;
 
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +29,6 @@ public class UserDto {
         return UserDto.builder()
                 .id(user.getId())
                 .account(user.getAccount())
-                .role(user.getRole())
                 .build();
     }
 

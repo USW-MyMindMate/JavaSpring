@@ -7,6 +7,8 @@ import com.example.MyMindMate.member.dto.UserDto;
 import com.example.MyMindMate.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,6 +21,14 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final EmailTokenRepository emailTokenRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
+
+    // 계정 존재 여부만 체크
+    public User findByAccount(String account) {
+        return userRepository.findByAccount(account).orElse(null);
+    }
 
     public void checkAccountDuplicate(String account, String email) {
 
@@ -47,6 +57,7 @@ public class UserService {
 
     }
 
+    // 비밀번호 입력값과 재입력값 같은지 확인
     public void validatePasswords(String password, String passwordConfirm) {
         if (password == null || password.isBlank()) {
             throw new IllegalArgumentException("비밀번호를 입력해주세요.");
@@ -82,13 +93,13 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용 중인 아이디입니다.");
         }
 
-        // 3. 비밀번호 검증
+        // 비밀번호 검증
         validatePasswords(userDTO.getPassword(), passwordConfirm);
 
         User user = User.builder()
                 .account(userDTO.getAccount())
                 .email(userDTO.getEmail())
-                .password(userDTO.getPassword()) // 실제 운영 환경에서는 암호화 필수!
+                .password(encoder.encode(userDTO.getPassword())) // 비밀번호 암호화
                 .role("PARENT") // 기본 역할 설정
                 .build();
 
@@ -101,7 +112,4 @@ public class UserService {
         log.info("회원가입 완료 회원 이메일 토큰 삭제:{}, {}", user.getAccount(), user.getEmail());
 
     }
-
-
-
 }

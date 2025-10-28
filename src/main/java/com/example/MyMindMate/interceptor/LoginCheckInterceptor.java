@@ -15,14 +15,22 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 1. 세션에서 회원 정보 조회
+        // 세션 가져오기 (새로 생성하지 않음)
         HttpSession session = request.getSession(false);
-        if(session == null || session.getAttribute("loginUser") == null){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json; charset=UTF-8");
+
+        response.setContentType("application/json; charset=UTF-8");
+
+        if (session == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // 400
+            response.getWriter().write("{\"error\": \"세션이 없습니다.\"}");
+            log.info("세션이 없습니다.");
+            return false;
+        }
+
+        if (session.getAttribute("loginUser") == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
             response.getWriter().write("{\"error\": \"로그인이 필요합니다.\"}");
-//            log.info("세션이 없습니다.");
-//            response.sendRedirect("/user/login");
+            log.info("로그인이 필요합니다.");
             return false;
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);

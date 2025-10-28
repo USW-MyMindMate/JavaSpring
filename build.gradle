@@ -29,6 +29,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// 이거 추가해야 BCryptPasswordEncoder 사용 가능
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
 	// In-memory test DB
 	runtimeOnly 'com.h2database:h2'
 

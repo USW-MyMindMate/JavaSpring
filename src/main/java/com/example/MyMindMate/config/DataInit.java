@@ -4,6 +4,7 @@ import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,13 +12,14 @@ import org.springframework.stereotype.Component;
 public class DataInit implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public void run(String... args) throws Exception {
         User user1 = User.builder()
                 .account("testuser")
                 .email("test@naver.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role("PARENT")
                 .build();
 
@@ -26,7 +28,7 @@ public class DataInit implements CommandLineRunner {
         User user2 = User.builder()
                 .account("jjeong")
                 .email("ask796629@naver.com")
-                .password("7777")
+                .password(passwordEncoder.encode("7777"))
                 .role("PARENT")
                 .build();
 
