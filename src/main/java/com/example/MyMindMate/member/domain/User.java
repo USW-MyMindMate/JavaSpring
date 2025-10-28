@@ -34,8 +34,9 @@ public class User {
     @JoinColumn(name = "parent_id")
     private User parent;
 
-    @OneToMany(mappedBy = "parent")
-    private List<User> children;
+
+    //@OneToMany(mappedBy = "parent")
+    //private List<User> children;
 
     @OneToMany(mappedBy = "user")
     private List<ChildProfile> childProfiles;
