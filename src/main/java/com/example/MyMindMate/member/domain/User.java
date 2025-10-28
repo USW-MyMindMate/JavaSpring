@@ -3,7 +3,6 @@ package com.example.MyMindMate.member.domain;
 import com.example.MyMindMate.email.domain.EmailToken;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Entity
@@ -34,22 +33,17 @@ public class User {
     @JoinColumn(name = "parent_id")
     private User parent;
 
-
     //@OneToMany(mappedBy = "parent")
     //private List<User> children;
 
     @OneToMany(mappedBy = "user")
     private List<ChildProfile> childProfiles;
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-//    private EmailToken emailToken;
-
     // 보호자 단말에 보낼 FCM 토큰
     @Setter
     @Column(name = "fcm_token")
     private String fcmToken;
 
-    // Builder용 생성자
     @Builder
     public User(String account, String email, String password, String role, String token) {
         this.account = account;
@@ -59,17 +53,15 @@ public class User {
         this.fcmToken = fcmToken;
     }
 
-    //datainit으로 인헤 추가
     public void setParent(User parent) {
         this.parent = parent;
     }
 
-    // FCM 로직에서 필요한 헬퍼 메서드 추가
     public Long getParentId() {
         return parent != null ? parent.getId() : null;
     }
 
     public String getName() {
-        return account; // 이름 컬럼이 없다면 account를 이름 대용으로 사용
+        return account;
     }
 }
