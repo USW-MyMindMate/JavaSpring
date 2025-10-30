@@ -20,15 +20,22 @@ public class Mood {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private MoodType moodType;
+    //@ManyToOne
+    //private MoodType moodType;
 
     @Column(nullable = false)
     private Long userId;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mood_type_name", nullable = false)
+    private MoodTypeName moodTypeName;
+
 
     private String reason;
 
     @Column(name = "recorded_at", nullable = false)
     private LocalDateTime recordedAt;
+
 }
 

@@ -46,6 +46,16 @@ dependencies {
     //email
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation "org.springframework.boot:spring-boot-starter-thymeleaf"
+
+
+	// fcm
+	implementation 'com.google.firebase:firebase-admin:9.1.1'
+
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.23.0'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+	// Spring 3.2+ RestClient 사용 시
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+
 }
 
 tasks.named('test') {

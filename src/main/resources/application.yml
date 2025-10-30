@@ -18,8 +18,11 @@ spring:
             enable: true
             trust: smtp.naver.com
 
-server:
-  port: 8080
-  servlet:
-    session:
-      timeout: 30m  # 사용자 활동 할 때마다 세션 시간 갱신
+
+# fcm
+fcm:
+  file_path: firebase/mmm_fcm.json
+  url: https://fcm.googleapis.com/v1/projects/mymindmate-5dae7/messages:send
+  google_api: https://www.googleapis.com/auth/cloud-platform
+  project_id: mymindmate-5dae7
+
