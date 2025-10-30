@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
@@ -19,14 +20,17 @@ public class ChildProfile {
     private Long id;
 
     // 부모 회원 (Member) 참조
+    @Setter
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Setter
     // 자식의 식별용 account (이걸 나중에 Member로 승격시킬 때 사용)
     @Column(name = "ACCOUNT", nullable = false)
     private String account;
 
+    @Setter
     @Column(name = "BIRTHDATE")
     private LocalDate birthdate;
 }

@@ -16,7 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "ACCOUNT", updatable = false, unique = true)
+    @Setter
+    @Column(name = "ACCOUNT", unique = true)
     private String account;
 
     @Column(name = "Email")
@@ -30,10 +31,20 @@ public class User {
     @Column(name = "role")
     private String role;
 
+    @Setter
+    @Column(name="LoginTime")
+    private Long loginTime;
+
+    @Setter
+    @Column(name="logoutTime")
+    private Long logoutTime;
+
+    @Setter
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private User parent;
 
+    @Setter
     @OneToMany(mappedBy = "user")
     private List<ChildProfile> childProfiles;
 

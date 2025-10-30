@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 public class ChildProfileDto {
     private Long id;
-    private Long userId;  // 부모 User의 id만 담음
-    private String account;
+    private String parent_Account;  // 부모 User의 id만 담음
+    private String child_Account;
     private LocalDate birthdate;
 }

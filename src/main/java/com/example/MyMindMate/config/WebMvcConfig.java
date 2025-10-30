@@ -1,6 +1,6 @@
 package com.example.MyMindMate.config;
 
-import com.example.MyMindMate.interceptor.LoginCheckInterceptor;
+//import com.example.MyMindMate.interceptor.LoginCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -10,23 +10,23 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(new LoginCheckInterceptor())
-                .addPathPatterns(("/**"))
-                .excludePathPatterns(
-                        "/user/confirm-email",
-                        "/user/verify",
-                        "/user/check-account",
-                        "/user/sign-up-finish",
-                        "/user/login",
-                        "/user/reconfirm-email",
-                        "/error",
-                        "/css/**",
-                        "/js/**"
-                );
-    }
+//🏁login session
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry){
+//        registry.addInterceptor(new LoginCheckInterceptor())
+//                .addPathPatterns(("/**"))
+//                .excludePathPatterns(
+//                        "/user/confirm-email",
+//                        "/user/verify",
+//                        "/user/check-account",
+//                        "/user/sign-up-finish",
+//                        "/user/login",
+//                        "/user/reconfirm-email",
+//                        "/error",
+//                        "/css/**",
+//                        "/js/**"
+//                );
+//    }
 
     // 👉 여기서 CORS 설정 추가
     @Override

@@ -2,14 +2,19 @@ package com.example.MyMindMate.member.open.service;
 
 import com.example.MyMindMate.email.domain.EmailToken;
 import com.example.MyMindMate.email.repository.EmailTokenRepository;
+import com.example.MyMindMate.member.domain.ChildProfile;
 import com.example.MyMindMate.member.domain.User;
+import com.example.MyMindMate.member.dto.ChildLoginDto;
+import com.example.MyMindMate.member.dto.ChildProfileDto;
 import com.example.MyMindMate.member.dto.UserDto;
+import com.example.MyMindMate.member.repository.ChildProfileRepository;
 import com.example.MyMindMate.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -21,6 +26,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final EmailTokenRepository emailTokenRepository;
+    private final ChildProfileRepository childProfileRepository;
 
     @Autowired
     private BCryptPasswordEncoder encoder;
@@ -112,4 +118,60 @@ public class UserService {
         log.info("회원가입 완료 회원 이메일 토큰 삭제:{}, {}", user.getAccount(), user.getEmail());
 
     }
+
+    // 사용자 정보 저장/업데이트
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public User childLogin(String ChildAccount) {
+        // 계정으로 유저 조회
+        User user = userRepository.findByAccount(ChildAccount)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정입니다."));
+
+        // 로그인 시간 저장
+        user.setLoginTime(System.currentTimeMillis());
+        user.setLogoutTime(null); // 새 로그인 시 logoutTime 초기화
+
+        userRepository.save(user);
+
+        return user;
+    }
+
+    @Transactional
+    public void childLogout(String account) {
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정입니다."));
+
+        user.setLogoutTime(System.currentTimeMillis());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public ChildProfile createChildProfile(ChildProfileDto dto) {
+
+        // 부모 account로 부모 User 찾기
+        User parentUser = userRepository.findByAccount(dto.getParent_Account())
+                .orElseThrow(() -> new IllegalArgumentException("부모 계정을 찾을 수 없습니다."));
+
+        // 자식 User 객체 생성 (나중에 회원으로 승격될 수 있음)
+        User childUser = new User();
+        childUser.setAccount(dto.getChild_Account());
+        childUser.setRole("CHILD");
+        childUser.setParent(parentUser); // 핵심 부분 👇 부모와 연결
+
+        userRepository.save(childUser);
+
+        // ChildProfile 엔티티 생성
+        ChildProfile profile = new ChildProfile();
+        profile.setUser(parentUser);       // 부모 참조
+        profile.setAccount(dto.getChild_Account());
+        profile.setBirthdate(dto.getBirthdate());
+
+        return childProfileRepository.save(profile);
+
+
+    }
 }
+
