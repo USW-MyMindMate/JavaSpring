@@ -13,6 +13,7 @@ import java.util.UUID;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,21 +22,19 @@ public class EmailToken {
 
     @Id
     @GeneratedValue
-    @UuidGenerator  // ✅ 최신 Hibernate 방식
-    @Column(length = 36)
-    private UUID tokenuuid; // ✅ String이 아니라 UUID 타입으로!
-
+    @UuidGenerator
+    @Column(name = "tokenuuid", columnDefinition = "BINARY(16)")
+    //Column(length = 36)
+    private UUID tokenuuid;
 
     private LocalDateTime expirationDate ;
 
-    @Setter
-    private boolean verified; //✅ 인증 여부
+    private boolean verified; // 인증 여부
 
-    @Setter
     private boolean expired;
 
     @Column(nullable = false)
-    private String email; // ✅ 이메일만 저장
+    private String email; // 이메일만 저장
 
 //    @OneToOne
 //    @JoinColumn(name = "user_id")

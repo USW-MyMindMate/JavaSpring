@@ -2,7 +2,7 @@ spring:
 #application:
 #name: MyMindMate
   profiles:
-    active: local  #prod, mysql
+    active: local #prod local  , mysql
 
   # smtp
   mail:

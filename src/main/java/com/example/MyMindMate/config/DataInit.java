@@ -10,6 +10,7 @@ import com.example.MyMindMate.routine.repository.RoutineLogRepository;
 import com.example.MyMindMate.routine.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -77,4 +78,6 @@ public class DataInit implements CommandLineRunner {
 
         System.out.println("===== DataInit 완료 (ChildProfileRepository 방식) =====");
     }
+
+
 }
