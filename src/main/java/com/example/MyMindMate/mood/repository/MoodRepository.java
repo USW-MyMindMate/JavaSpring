@@ -15,9 +15,9 @@ public interface MoodRepository extends JpaRepository<Mood, Long> {
             "FROM Mood m WHERE m.userId = :userId GROUP BY m.moodTypeName")
     List<MoodStatsResponse> countByMoodTypeNameGrouped(Long userId);
 
-    // 감정 반복 감지용 메서드 추가
     long countByUserIdAndMoodTypeName(Long userId, MoodTypeName moodTypeName);
 
-    // 2일 지난 감정 삭제용 메서드 추가
+    List<Mood> findTop3ByUserIdOrderByRecordedAtDesc(Long userId);
+
     void deleteByRecordedAtBefore(LocalDateTime dateTime);
 }

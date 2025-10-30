@@ -19,9 +19,9 @@ public class MoodController {
     private final MoodService moodService;
 
     @PostMapping
-    public ResponseEntity<Void> recordMood(@RequestBody MoodRecordRequest request) {
+    public ResponseEntity<String> recordMood(@RequestBody MoodRecordRequest request) {
         moodService.recordMood(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok("감정 기록 및 FCM 처리 완료");
     }
 
     @GetMapping("/recommend")

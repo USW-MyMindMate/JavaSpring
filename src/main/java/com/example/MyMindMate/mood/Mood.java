@@ -37,9 +37,5 @@ public class Mood {
     @Column(name = "recorded_at", nullable = false)
     private LocalDateTime recordedAt;
 
-    //추가
-    @Enumerated(EnumType.STRING)
-    @Column(name = "mood_type_name", nullable = false)
-    private MoodTypeName moodTypeName;
 }
 
