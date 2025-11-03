@@ -10,7 +10,6 @@ import com.example.MyMindMate.routine.repository.RoutineLogRepository;
 import com.example.MyMindMate.routine.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -27,24 +26,27 @@ public class DataInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // 부모 저장
+        // 부모 저장 (FCM 토큰 포함)
         User parent = User.builder()
                 .account("parentuser")
                 .email("parent@naver.com")
                 .password("1234")
                 .role("PARENT")
+                .token("TEST_PARENT_TOKEN_9999") // 토큰 추가
                 .build();
 
         User savedParent = userRepository.save(parent);
 
-        // 자녀 저장
+        // 자녀 저장 (부모 연결 + 토큰 포함)
         User child = User.builder()
                 .account("childuser")
                 .email("child@naver.com")
                 .password("1234")
                 .role("CHILD")
+                .token("TEST_CHILD_TOKEN_8888") // 토큰 추가
                 .build();
-        child.setParent(savedParent);
+
+        child.setParent(savedParent); // 부모 연결
         User savedChild = userRepository.save(child);
 
         // ChildProfile 저장
@@ -76,8 +78,6 @@ public class DataInit implements CommandLineRunner {
 
         routineLogRepository.save(routineLog);
 
-        System.out.println("===== DataInit 완료 (ChildProfileRepository 방식) =====");
+        System.out.println("===== DataInit 완료 (parent-child 연결 + FCM 토큰 저장) =====");
     }
-
-
 }

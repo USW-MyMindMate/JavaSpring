@@ -4,6 +4,7 @@ spring:
   profiles:
     active: local #prod local  , mysql
 
+
   # smtp
   mail:
     host: smtp.naver.com          # 네이버 SMTP 서버 주소
@@ -25,4 +26,10 @@ fcm:
   url: https://fcm.googleapis.com/v1/projects/mymindmate-5dae7/messages:send
   google_api: https://www.googleapis.com/auth/cloud-platform
   project_id: mymindmate-5dae7
+
+app:
+  fcm:
+    mock: true
+    path: firebase/mmm_fcm.json
+
 
