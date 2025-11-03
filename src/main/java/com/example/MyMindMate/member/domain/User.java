@@ -39,7 +39,7 @@ public class User {
     private Long logoutTime;
 
     @Setter
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "parent_id")
     private User parent;
 
@@ -58,7 +58,7 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
-        this.fcmToken = fcmToken;
+        this.fcmToken = token;
     }
 
     public void setParent(User parent) {
