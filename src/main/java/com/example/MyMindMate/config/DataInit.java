@@ -9,7 +9,9 @@ import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.repository.RoutineLogRepository;
 import com.example.MyMindMate.routine.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -24,13 +26,16 @@ public class DataInit implements CommandLineRunner {
     private final RoutineRepository routineRepository;
     private final RoutineLogRepository routineLogRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
         // 부모 저장 (FCM 토큰 포함)
         User parent = User.builder()
                 .account("parentuser")
                 .email("parent@naver.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role("PARENT")
                 .token("TEST_PARENT_TOKEN_9999") // 토큰 추가
                 .build();
@@ -41,7 +46,7 @@ public class DataInit implements CommandLineRunner {
         User child = User.builder()
                 .account("childuser")
                 .email("child@naver.com")
-                .password("1234")
+                .password(passwordEncoder.encode("1234"))
                 .role("CHILD")
                 .token("TEST_CHILD_TOKEN_8888") // 토큰 추가
                 .build();

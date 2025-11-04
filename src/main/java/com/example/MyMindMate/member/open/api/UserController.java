@@ -35,6 +35,23 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
 
+
+//    //졸프 로그인
+//    @PostMapping("/login")
+//    public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) {
+//
+//        try {
+//            userService.login(userDto);
+//            log.info("로그인 성공 - 회원: {}", userDto.getAccount());
+//            return ResponseEntity.ok(new ApiResponse("로그인이 완료되었습니다."));
+//
+//        } catch (IllegalArgumentException e) {
+//            log.warn("로그인 실패 - {}", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(new ApiResponse("로그인 실패: " + e.getMessage()));
+//        }
+//    }
+
     //test용 로그인
     @PostMapping("/login")
     public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) {
@@ -143,7 +160,7 @@ public class UserController {
 
 
     @GetMapping("/confirm-email")
-    public ResponseEntity<ApiResponse> ConfirmEmail(@RequestParam String email) throws MessagingException {
+    public ResponseEntity<ApiResponse> ConfirmEmail(@RequestParam("email") String email) throws MessagingException {
         EmailToken emailToken = emailTokenService.createEmailToken(email);
         emailTokenService.createVerifyLink(emailToken);
 

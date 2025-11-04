@@ -26,6 +26,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable()) // POST 요청 문제 없음
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll() // 모든 경로 인증 없이 허용
@@ -38,7 +39,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // 개발용, 앱 어디서든 허용
+        configuration.setAllowedOrigins(List.of(
+                "http://localhost:8081",     // iOS 시뮬레이터
+                "http://10.0.2.2:8081",      // Android 에뮬레이터
+                "http://127.0.0.1:8081"      // 로컬호스트 대체
+        ));
+        //configuration.setAllowedOrigins(List.of("")); // 개발용, 앱 어디서든 허용
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // 세션 쿠키 포함 가능

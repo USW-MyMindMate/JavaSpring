@@ -33,9 +33,10 @@ public class RoutineController {
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<RoutineResponse>> getRoutines(@PathVariable Long userId) {
+    public ResponseEntity<List<RoutineResponse>> getRoutines(@PathVariable("userId") Long userId) {
         return ResponseEntity.ok(routineService.getRoutineByUserId(userId));
     }
+
 
     //@PatchMapping("/{id}")
     //public ResponseEntity<>

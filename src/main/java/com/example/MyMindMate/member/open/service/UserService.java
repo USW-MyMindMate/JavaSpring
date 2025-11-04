@@ -29,7 +29,7 @@ public class UserService {
     private final ChildProfileRepository childProfileRepository;
 
     @Autowired
-    private BCryptPasswordEncoder encoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // 계정 존재 여부만 체크
     public User findByAccount(String account) {
@@ -105,7 +105,7 @@ public class UserService {
         User user = User.builder()
                 .account(userDTO.getAccount())
                 .email(userDTO.getEmail())
-                .password(encoder.encode(userDTO.getPassword())) // 비밀번호 암호화
+                .password(passwordEncoder.encode(userDTO.getPassword())) // 비밀번호 암호화
                 .role("PARENT") // 기본 역할 설정
                 .build();
 
@@ -172,6 +172,24 @@ public class UserService {
         return childProfileRepository.save(profile);
 
 
+    }
+
+    @Transactional
+    public void login(UserDto userDto) {
+
+        User user = userRepository.findByAccount(userDto.getAccount())
+                .orElseThrow(() -> new IllegalArgumentException("계정이 존재하지 않습니다."));
+
+        // 비밀번호 검증
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 로그인 시간 기록
+        user.setLoginTime(System.currentTimeMillis());
+        user.setLogoutTime(null);
+
+        userRepository.save(user);
     }
 }
 
