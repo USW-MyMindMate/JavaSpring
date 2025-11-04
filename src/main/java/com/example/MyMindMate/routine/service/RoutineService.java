@@ -1,8 +1,10 @@
 package com.example.MyMindMate.routine.service;
 
 import com.example.MyMindMate.routine.Routine;
+import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.dto.RoutineRequest;
 import com.example.MyMindMate.routine.dto.RoutineResponse;
+import com.example.MyMindMate.routine.repository.RoutineLogRepository;
 import com.example.MyMindMate.routine.repository.RoutineRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 public class RoutineService {
 
     private final RoutineRepository routineRepository;
+    private final RoutineLogRepository routineLogRepository;
 
+    // ------------------- 루틴 CRUD -------------------
     public RoutineResponse createRoutine(RoutineRequest request) {
         validateRequest(request);
 
@@ -66,6 +68,23 @@ public class RoutineService {
                 .collect(Collectors.toList());
     }
 
+    // ------------------- 루틴 통계(7번 기능 핵심) -------------------
+    public Map<String, Object> getRoutineStats(Long userId) {
+        List<Routine> routines = routineRepository.findByUserId(userId);
+        List<RoutineLog> logs = routineLogRepository.findByUserId(userId);
+
+        long total = routines.size();
+        long completed = logs.stream().filter(RoutineLog::isCompleted).count();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalRoutines", total);
+        stats.put("completedRoutines", completed);
+        stats.put("completionRate", total == 0 ? 0 : (completed * 100.0 / total));
+
+        return stats;
+    }
+
+    // ------------------- 내부 유틸 -------------------
     public RoutineResponse toResponse(Routine routine) {
         return RoutineResponse.builder()
                 .id(routine.getId())
