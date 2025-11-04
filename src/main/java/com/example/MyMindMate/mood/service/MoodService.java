@@ -68,7 +68,7 @@ public class MoodService {
     /**
      * 최근 3개의 감정이 모두 부정인지 확인
      */
-    private boolean isRepeatedNegativeMood(Long userId) {
+    public boolean isRepeatedNegativeMood(Long userId) {
         List<Mood> recentMoods = moodRepository.findTop3ByUserIdOrderByRecordedAtDesc(userId);
         return recentMoods.size() >= 3 &&
                 recentMoods.stream().allMatch(m ->
