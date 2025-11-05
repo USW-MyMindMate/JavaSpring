@@ -169,11 +169,26 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse("인증 메일 전송 완료되었습니다. 이메일 확인을 해주세요"));
     }
 
+    //사용자가 이메일 인증 링크 눌러 인증 필드 true 바꾸는 기능
     @GetMapping("/verify")
     public ResponseEntity<ApiResponse> verifyEmail(@RequestParam("uuid") UUID tokenuuid) {
 
         EmailToken emailToken = emailTokenService.verifyToken(tokenuuid);
         return ResponseEntity.ok(new ApiResponse("이메일 인증이 완료되었습니다."));
+    }
+
+    // 실제 인증 필드가 true인지 확인하여 이메일 인증을 최종 완료하는 기능
+    @GetMapping("/check-verify")
+    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam String email) {
+        boolean isVerified = emailTokenService.CheckVerifyEmail(email);
+        String message;
+        if (isVerified) {
+            message = "이메일 인증이 완료되었습니다.";
+        } else {
+            message = "이메일 인증이 아직 완료되지 않았습니다.";
+        }
+        ApiResponse response = new ApiResponse(message, isVerified);
+        return ResponseEntity.ok(response);
     }
 
     //이메일 재인증

@@ -4,6 +4,7 @@ package com.example.MyMindMate.email.service;
 import com.example.MyMindMate.config.EmailConfig;
 import com.example.MyMindMate.email.domain.EmailToken;
 import com.example.MyMindMate.email.repository.EmailTokenRepository;
+import com.example.MyMindMate.global.ApiResponse;
 import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.UserRepository;
 import jakarta.mail.MessagingException;
@@ -105,6 +106,13 @@ public class EmailTokenService {
 
         return emailToken;
     }
+
+    public boolean CheckVerifyEmail(String email) {
+        EmailToken token = emailTokenRepository.findByEmail(email);
+
+        return token.isVerified();
+    }
+
 
     public EmailToken recreateEmailToken(String email) throws MessagingException {
         EmailToken oldToken = emailTokenRepository.findByEmail(email);
