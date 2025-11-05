@@ -22,18 +22,18 @@ public class EmailToken {
 
     @Id
     @GeneratedValue
-    @UuidGenerator  // ✅ 최신 Hibernate 방식
+    @UuidGenerator
     @Column(length = 36)
-    private UUID tokenuuid; // ✅ String이 아니라 UUID 타입으로!
+    private UUID tokenuuid; //String이 아니라 UUID 타입으로!
 
     private LocalDateTime expirationDate ;
 
-    private boolean verified; //✅ 인증 여부
+    private boolean verified; //인증 여부
 
     private boolean expired;
 
     @Column(nullable = false)
-    private String email; // ✅ 이메일만 저장
+    private String email; // 이메일만 저장
 
 //    @OneToOne
 //    @JoinColumn(name = "user_id")
