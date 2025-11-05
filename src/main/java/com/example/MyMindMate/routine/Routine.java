@@ -1,5 +1,6 @@
 package com.example.MyMindMate.routine;
 
+import com.example.MyMindMate.member.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,11 +21,13 @@ public class Routine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long userId;
+    // User 엔티티와 다대일 관계 (루틴 여러 개가 한 명의 사용자에게 속함)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "created_by", nullable = false)
-    private Long createBy;
+//    @Column(name = "created_by", nullable = false)
+//    private Long createBy;
 
     @Column(nullable = false)
     private String title;

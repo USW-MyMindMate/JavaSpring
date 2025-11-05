@@ -18,13 +18,14 @@ public class RoutineController {
 
     @PostMapping
     public ResponseEntity<RoutineResponse> createRoutine(@RequestBody RoutineRequest request) {
-        return ResponseEntity.ok(routineService.createRoutine(request));
+        RoutineResponse response = routineService.createRoutine(request);
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<RoutineResponse> updateRoutine(@PathVariable Long id, @RequestBody RoutineRequest request) {
-        return ResponseEntity.ok(routineService.updateRoutine(id, request));
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<RoutineResponse> updateRoutine(@PathVariable Long id, @RequestBody RoutineRequest request) {
+//        return ResponseEntity.ok(routineService.updateRoutine(id, request));
+//    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteRoutine(@PathVariable Long id) {

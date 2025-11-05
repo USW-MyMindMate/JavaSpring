@@ -2,6 +2,7 @@ package com.example.MyMindMate.routine.service;
 
 import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.UserRepository;
+import com.example.MyMindMate.routine.DayOfWeekType;
 import com.example.MyMindMate.routine.Routine;
 import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.dto.RoutineRequest;
@@ -27,37 +28,39 @@ public class RoutineService {
 
     // ------------------- 루틴 CRUD -------------------
     public RoutineResponse createRoutine(RoutineRequest request) {
-        validateRequest(request);
+
+        User childaccount = userRepository.findByAccount(request.getChildAccount())
+                .orElseThrow(() -> new IllegalArgumentException("해당 자녀 계정을 찾을 수 없습니다."));
 
         Routine routine = Routine.builder()
-                .userId(request.getUserId())
-                .createBy(request.getCreatedBy())
+                .user(childaccount)
                 .title(request.getTitle())
                 .time(LocalTime.parse(request.getTime()))
-                .dayOfWeek(request.getDayOfWeek())
+                .dayOfWeek(request.getDayOfWeek())  // "Monday" 그대로 저장
                 .build();
 
         routine = routineRepository.save(routine);
+
         return toResponse(routine);
     }
 
-    public RoutineResponse updateRoutine(Long id, RoutineRequest request) {
-        validateRequest(request);
-
-        Routine routine = routineRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("루틴을 찾을 수 없습니다."));
-
-        routine = Routine.builder()
-                .id(id)
-                .userId(request.getUserId())
-                .createBy(request.getCreatedBy())
-                .title(request.getTitle())
-                .time(LocalTime.parse(request.getTime()))
-                .dayOfWeek(request.getDayOfWeek())
-                .build();
-
-        return toResponse(routineRepository.save(routine));
-    }
+//    public RoutineResponse updateRoutine(Long id, RoutineRequest request) {
+//        validateRequest(request);
+//
+//        Routine routine = routineRepository.findById(id)
+//                .orElseThrow(() -> new NoSuchElementException("루틴을 찾을 수 없습니다."));
+//
+//        routine = Routine.builder()
+//                .id(id)
+//                .userId(request.getUserId())
+//                .createBy(request.getCreatedBy())
+//                .title(request.getTitle())
+//                .time(LocalTime.parse(request.getTime()))
+//                .dayOfWeek(request.getDayOfWeek())
+//                .build();
+//
+//        return toResponse(routineRepository.save(routine));
+//    }
 
     public void deleteRoutine(Long id) {
         Routine routine = routineRepository.findById(id)
@@ -98,7 +101,7 @@ public class RoutineService {
                 .id(routine.getId())
                 .title(routine.getTitle())
                 .time(routine.getTime().toString())
-                .dayOfWeek(routine.getDayOfWeek())
+                .dayOfWeek(String.valueOf(routine.getDayOfWeek()))
                 .build();
     }
 

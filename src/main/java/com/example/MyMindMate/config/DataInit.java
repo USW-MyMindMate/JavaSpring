@@ -4,6 +4,7 @@ import com.example.MyMindMate.member.domain.ChildProfile;
 import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.ChildProfileRepository;
 import com.example.MyMindMate.member.repository.UserRepository;
+import com.example.MyMindMate.routine.DayOfWeekType;
 import com.example.MyMindMate.routine.Routine;
 import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.repository.RoutineLogRepository;
@@ -65,8 +66,8 @@ public class DataInit implements CommandLineRunner {
 
         // 루틴 생성
         Routine routine = Routine.builder()
-                .userId(savedChild.getId())
-                .createBy(savedParent.getId())
+                .user(savedChild)
+//                .createBy(savedParent.getId())
                 .title("아침 운동")
                 .time(LocalTime.of(7, 30))
                 .dayOfWeek("MONDAY")
