@@ -1,5 +1,7 @@
 package com.example.MyMindMate.routine.service;
 
+import com.example.MyMindMate.member.domain.User;
+import com.example.MyMindMate.member.repository.UserRepository;
 import com.example.MyMindMate.routine.Routine;
 import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.dto.RoutineRequest;
@@ -21,6 +23,7 @@ public class RoutineService {
 
     private final RoutineRepository routineRepository;
     private final RoutineLogRepository routineLogRepository;
+    private final UserRepository userRepository; //  account → userId 변환용
 
     // ------------------- 루틴 CRUD -------------------
     public RoutineResponse createRoutine(RoutineRequest request) {
@@ -62,13 +65,18 @@ public class RoutineService {
         routineRepository.deleteById(id);
     }
 
-    public List<RoutineResponse> getRoutineByUserId(Long userId) {
+    //  account 기반으로 루틴 조회
+    public List<RoutineResponse> getRoutineByAccount(String account) {
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다."));
+        Long userId = user.getId();
+
         return routineRepository.findByUserId(userId).stream()
                 .map(this::toResponse)
                 .collect(Collectors.toList());
     }
 
-    // ------------------- 루틴 통계(7번 기능 핵심) -------------------
+    // ------------------- 루틴 통계 -------------------
     public Map<String, Object> getRoutineStats(Long userId) {
         List<Routine> routines = routineRepository.findByUserId(userId);
         List<RoutineLog> logs = routineLogRepository.findByUserId(userId);

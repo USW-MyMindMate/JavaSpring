@@ -13,8 +13,13 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<DashboardResponse> getDashboard(@PathVariable Long userId) {
-        return ResponseEntity.ok(dashboardService.getDashboardData(userId));
+    /**
+     * 프론트에서 account로 대시보드 조회
+     * 예: GET /api/dashboard?account=child001
+     */
+    @GetMapping
+    public ResponseEntity<DashboardResponse> getDashboard(@RequestParam String account) {
+        return ResponseEntity.ok(dashboardService.getDashboardData(account));
     }
 }
+

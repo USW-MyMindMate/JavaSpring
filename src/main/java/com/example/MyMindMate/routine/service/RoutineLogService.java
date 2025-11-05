@@ -1,5 +1,7 @@
 package com.example.MyMindMate.routine.service;
 
+import com.example.MyMindMate.member.domain.User;
+import com.example.MyMindMate.member.repository.UserRepository;
 import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.dto.RoutineLogRequest;
 import com.example.MyMindMate.routine.dto.RoutineLogResponse;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class RoutineLogService {
 
     private final RoutineLogRepository routineLogRepository;
+    private final UserRepository userRepository; //  추가
 
     @Transactional
     public RoutineLogResponse createOrUpdateLog(RoutineLogRequest request) {
@@ -43,10 +46,11 @@ public class RoutineLogService {
         return toResponse(log);
     }
 
-    public List<RoutineLogResponse> getLogsByUserId(Long userId) {
-        if (userId == null) {
-            throw new IllegalArgumentException("userId는 필수입니다.");
-        }
+    //  account 기반 루틴 로그 조회
+    public List<RoutineLogResponse> getLogsByAccount(String account) {
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다."));
+        Long userId = user.getId();
 
         return routineLogRepository.findByUserId(userId).stream()
                 .map(this::toResponse)

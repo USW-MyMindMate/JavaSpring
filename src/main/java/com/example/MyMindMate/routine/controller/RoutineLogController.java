@@ -23,10 +23,13 @@ public class RoutineLogController {
         return ResponseEntity.ok(response);
     }
 
-    // (userId)아이의 전체 루틴 로그 조회
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<RoutineLogResponse>> getRoutineLogsByUserId(@PathVariable Long userId) {
-        List<RoutineLogResponse> logs = routineLogService.getLogsByUserId(userId);
+    /**
+     * account 기반 루틴 로그 조회
+     * 예: GET /api/routine-logs?account=child001
+     */
+    @GetMapping
+    public ResponseEntity<List<RoutineLogResponse>> getRoutineLogsByAccount(@RequestParam String account) {
+        List<RoutineLogResponse> logs = routineLogService.getLogsByAccount(account);
         return ResponseEntity.ok(logs);
     }
 }
