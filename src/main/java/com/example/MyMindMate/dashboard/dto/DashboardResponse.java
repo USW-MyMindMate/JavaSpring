@@ -19,6 +19,4 @@ public class DashboardResponse {
     // 감정 통계
     private List<MoodStatsResponse> moodStats;
 
-    // 활동 추천 (부정 감정 3회 시 표시)
-    private String recommendation;
 }
