@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MoodRecordRequest {
 
-    private Long userId;
+    private String account;  // 변경: userId 대신 account로 받기
     private String reason;
-    private String moodTypeName; // 감정 이름 (선택적으로 추가 가능)
+    private String moodTypeName;
 }

@@ -19,22 +19,32 @@ public class MoodController {
 
     private final MoodService moodService;
 
-    // 감정 기록 시 활동 추천 문구까지 응답
+    /**
+     *  감정 기록 API
+     * 예: POST /api/moods
+     * Body: { "account": "childuser", "moodTypeName": "ANGRY", "reason": "시험 스트레스" }
+     */
     @PostMapping
     public ResponseEntity<MoodRecordResponse> recordMood(@RequestBody MoodRecordRequest request) {
         MoodRecordResponse response = moodService.recordMood(request);
         return ResponseEntity.ok(response);
     }
 
-    // 감정별 추천 활동 조회
+    /**
+     *  감정별 추천 활동 조회
+     * 예: GET /api/moods/recommend?moodTypeName=ANGRY
+     */
     @GetMapping("/recommend")
-    public ResponseEntity<List<MoodRecommendationDto>> recommend(@RequestParam MoodTypeName moodTypeName) {
+    public ResponseEntity<List<MoodRecommendationDto>> recommend(@RequestParam("moodTypeName") MoodTypeName moodTypeName) {
         return ResponseEntity.ok(moodService.getRecommendations(moodTypeName));
     }
 
-    // 감정 통계 조회
+    /**
+     *  account 기반 감정 통계 조회
+     * 예: GET /api/moods/stats?account=childuser
+     */
     @GetMapping("/stats")
-    public ResponseEntity<List<MoodStatsResponse>> getStats(@RequestParam Long userId) {
-        return ResponseEntity.ok(moodService.getMoodStats(userId));
+    public ResponseEntity<List<MoodStatsResponse>> getStats(@RequestParam("account") String account) {
+        return ResponseEntity.ok(moodService.getMoodStatsByAccount(account));
     }
 }

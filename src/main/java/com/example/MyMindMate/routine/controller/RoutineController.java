@@ -22,12 +22,14 @@ public class RoutineController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RoutineResponse> updateRoutine(@PathVariable Long id, @RequestBody RoutineRequest request) {
+    public ResponseEntity<RoutineResponse> updateRoutine(
+            @PathVariable("id") Long id,
+            @RequestBody RoutineRequest request) {
         return ResponseEntity.ok(routineService.updateRoutine(id, request));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoutine(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRoutine(@PathVariable("id") Long id) {
         routineService.deleteRoutine(id);
         return ResponseEntity.noContent().build();
     }
@@ -37,8 +39,7 @@ public class RoutineController {
      * 예: GET /api/routines?account=child001
      */
     @GetMapping
-    public ResponseEntity<List<RoutineResponse>> getRoutines(@RequestParam String account) {
+    public ResponseEntity<List<RoutineResponse>> getRoutines(@RequestParam("account") String account) {
         return ResponseEntity.ok(routineService.getRoutineByAccount(account));
     }
 }
-

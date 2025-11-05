@@ -28,7 +28,7 @@ public class RoutineLogController {
      * 예: GET /api/routine-logs?account=child001
      */
     @GetMapping
-    public ResponseEntity<List<RoutineLogResponse>> getRoutineLogsByAccount(@RequestParam String account) {
+    public ResponseEntity<List<RoutineLogResponse>> getRoutineLogsByAccount(@RequestParam("account") String account) { 
         List<RoutineLogResponse> logs = routineLogService.getLogsByAccount(account);
         return ResponseEntity.ok(logs);
     }

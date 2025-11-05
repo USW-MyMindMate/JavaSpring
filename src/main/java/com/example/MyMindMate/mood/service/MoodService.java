@@ -32,34 +32,35 @@ public class MoodService {
     private final FcmService fcmService;
 
     /**
-     * 감정 기록 + 3회 부정 감정 시 추천 문구 반환
+     * 감정 기록 (account → userId 변환 포함)
      */
     @Transactional
     public MoodRecordResponse recordMood(MoodRecordRequest request) {
+        // account 기반으로 userId 변환
+        User user = userRepository.findByAccount(request.getAccount())
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다."));
+        Long userId = user.getId();
+
         MoodTypeName type = MoodTypeName.valueOf(request.getMoodTypeName().toUpperCase());
 
         // 감정 저장
         moodRepository.save(
                 Mood.builder()
-                        .userId(request.getUserId())
+                        .userId(userId)
                         .moodTypeName(type)
                         .reason(request.getReason())
                         .recordedAt(LocalDateTime.now())
                         .build()
         );
 
-        // 최근 3개 감정 조회
-        List<Mood> recentMoods = moodRepository.findTop3ByUserIdOrderByRecordedAtDesc(request.getUserId());
-        boolean isRepeatedNegative = isRepeatedNegativeMood(request.getUserId());
+        boolean isRepeatedNegative = isRepeatedNegativeMood(userId);
 
-        // 보호자 알림 (기존 FCM 로직)
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("사용자 정보를 찾을 수 없습니다."));
+        // 보호자 알림
         if (user.getParentId() != null && isRepeatedNegative) {
-            notifyParent(request.getUserId(), type);
+            notifyParent(userId, type);
         }
 
-        // 3회 연속 부정 감정 시 아이에게 추천 문구 반환
+        // 3회 연속 부정 감정 시 추천 문구 반환
         String recommendation = null;
         if (isRepeatedNegative) {
             List<String> messages = new ArrayList<>(List.of(
@@ -83,8 +84,7 @@ public class MoodService {
     public boolean isRepeatedNegativeMood(Long userId) {
         List<Mood> recentMoods = moodRepository.findTop3ByUserIdOrderByRecordedAtDesc(userId);
         return recentMoods.size() >= 3 &&
-                recentMoods.stream().allMatch(m ->
-                        m.getMoodTypeName() != null && m.getMoodTypeName().isNegative());
+                recentMoods.stream().allMatch(m -> m.getMoodTypeName() != null && m.getMoodTypeName().isNegative());
     }
 
     /**
@@ -117,9 +117,11 @@ public class MoodService {
                 .collect(Collectors.toList());
     }
 
-    /** 감정 통계 조회 */
-    public List<MoodStatsResponse> getMoodStats(Long userId) {
-        return moodRepository.countByMoodTypeNameGrouped(userId);
+    /** account 기반 감정 통계 조회 */
+    public List<MoodStatsResponse> getMoodStatsByAccount(String account) {
+        User user = userRepository.findByAccount(account)
+                .orElseThrow(() -> new IllegalArgumentException("해당 계정을 찾을 수 없습니다."));
+        return moodRepository.countByMoodTypeNameGrouped(user.getId());
     }
 
     /** 2일 지난 감정 자동 삭제 */

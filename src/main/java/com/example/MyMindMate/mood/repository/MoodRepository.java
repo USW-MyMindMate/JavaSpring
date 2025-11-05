@@ -5,6 +5,7 @@ import com.example.MyMindMate.mood.MoodTypeName;
 import com.example.MyMindMate.mood.dto.MoodStatsResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +15,7 @@ public interface MoodRepository extends JpaRepository<Mood, Long> {
 
     @Query("SELECT new com.example.MyMindMate.mood.dto.MoodStatsResponse(m.moodTypeName, COUNT(m)) " +
             "FROM Mood m WHERE m.userId = :userId GROUP BY m.moodTypeName")
-    List<MoodStatsResponse> countByMoodTypeNameGrouped(Long userId);
+    List<MoodStatsResponse> countByMoodTypeNameGrouped(@Param("userId") Long userId);
 
     long countByUserIdAndMoodTypeName(Long userId, MoodTypeName moodTypeName);
 
@@ -24,6 +25,6 @@ public interface MoodRepository extends JpaRepository<Mood, Long> {
 
     void deleteByRecordedAtBefore(LocalDateTime dateTime);
 
-    //moodhistory
+    // moodhistory
     List<Mood> findByUserIdOrderByRecordedAtDesc(Long userId);
 }

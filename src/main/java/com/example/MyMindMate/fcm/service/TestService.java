@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static jakarta.mail.Transport.send;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -19,7 +17,22 @@ public class TestService {
     private final UserRepository userRepository;
     private final FcmService fcmService;
 
-    public void  pushToParentByChildUserId(Long childUserId, String title, String body) {
+    /**
+     * account 기반 부모에게 FCM 푸시
+     */
+    public void pushToParentByChildAccount(String childAccount, String title, String body) {
+        User child = userRepository.findByAccount(childAccount)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 자녀 계정입니다: " + childAccount));
+
+        User parent = child.getParent();
+        if (parent == null) {
+            throw new IllegalStateException("해당 자녀의 부모 정보가 없습니다. account=" + childAccount);
+        }
+
+        sendTo(parent, title, body);
+    }
+
+    public void pushToParentByChildUserId(Long childUserId, String title, String body) {
         User child = userRepository.findById(childUserId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 자녀 사용자입니다. id=" + childUserId));
 
@@ -27,8 +40,8 @@ public class TestService {
         if (parent == null) {
             throw new IllegalStateException("해당 자녀의 부모 정보가 없습니다. id=" + childUserId);
         }
-        sendTo(parent, title, body);
 
+        sendTo(parent, title, body);
     }
 
     public void pushToParentByChildProfileId(Long childProfileId, String title, String body) {
