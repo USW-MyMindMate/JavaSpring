@@ -23,4 +23,7 @@ public interface MoodRepository extends JpaRepository<Mood, Long> {
     Optional<Mood> findTopByUserIdOrderByRecordedAtDesc(Long userId);
 
     void deleteByRecordedAtBefore(LocalDateTime dateTime);
+
+    //moodhistory
+    List<Mood> findByUserIdOrderByRecordedAtDesc(Long userId);
 }
