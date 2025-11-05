@@ -16,7 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -170,8 +172,16 @@ public class UserService {
         profile.setBirthdate(dto.getBirthdate());
 
         return childProfileRepository.save(profile);
+    }
 
+    public List<String> findChildByParent(String parentAccount) {
+        User parent = userRepository.findByAccount(parentAccount)
+                .orElseThrow(() -> new IllegalArgumentException("부모 계정을 찾을 수 없습니다: " + parentAccount));
 
+        // 부모가 가진 자식 리스트 (User 테이블의 parent_id 관계 기준)
+        return userRepository.findByParent_Id(parent.getId()).stream()
+                .map(User::getAccount)
+                .collect(Collectors.toList());
     }
 
     @Transactional

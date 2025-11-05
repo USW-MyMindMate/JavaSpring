@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.desktop.AboutHandler;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
 
-//    //졸프 로그인
+//    //졸프 로그인: controller-> service 옮기는 작업중
 //    @PostMapping("/login")
 //    public ResponseEntity<ApiResponse> login(@RequestBody UserDto userDto) {
 //
@@ -199,12 +200,20 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse("회원가입 완료되었습니다."));
     }
 
-
     @PostMapping("/child-profile")
     public ResponseEntity<ApiResponse> createChildProfile(@RequestBody ChildProfileDto dto) {
         ChildProfile profile = userService.createChildProfile(dto);
         return ResponseEntity.ok(new ApiResponse("아이 계정이 등록되었습니다."));
     }
+
+    // 부모 account로 자녀 계정 리스트 조회
+    @PostMapping("/find-ChildByParent")
+    public List<String> findChildByParent(@RequestBody UserDto userDTO) {
+        String parentAccount = userDTO.getAccount();
+        log.info("부모 계정 조회 요청: {}", parentAccount);
+        return userService.findChildByParent(parentAccount);
+    }
+
 }
 
 
