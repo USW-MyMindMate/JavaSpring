@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Builder
+@ToString
 public class RoutineLogResponse {
-    private Long id;
     private Long routineId;
-    private Long userId;
 
     @JsonProperty("isCompleted")
     private boolean isCompleted;

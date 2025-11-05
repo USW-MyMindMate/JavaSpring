@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class RoutineLogRequest {
     private Long routineId;
-    private Long userId;
 
     @JsonProperty("isCompleted")
     private boolean isCompleted;

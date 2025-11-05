@@ -77,8 +77,8 @@ public class DataInit implements CommandLineRunner {
 
         // 루틴 로그 생성
         RoutineLog routineLog = RoutineLog.builder()
-                .routineId(savedRoutine.getId())
-                .userId(savedChild.getId())
+                .routine(savedRoutine)
+                .user(savedChild)
                 .isCompleted(false)
                 .build();
 
