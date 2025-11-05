@@ -23,13 +23,12 @@ public class EmailToken {
     @Id
     @GeneratedValue
     @UuidGenerator
-    @Column(name = "tokenuuid", columnDefinition = "BINARY(16)")
-    //Column(length = 36)
-    private UUID tokenuuid;
+    @Column(length = 36)
+    private UUID tokenuuid; //String이 아니라 UUID 타입으로!
 
     private LocalDateTime expirationDate ;
 
-    private boolean verified; // 인증 여부
+    private boolean verified; //인증 여부
 
     private boolean expired;
 

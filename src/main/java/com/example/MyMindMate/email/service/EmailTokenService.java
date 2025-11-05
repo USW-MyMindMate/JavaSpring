@@ -28,7 +28,7 @@ public class EmailTokenService {
     private final EmailTokenRepository emailTokenRepository;
     private final JavaMailSender javaMailSender;
     private final EmailConfig emailConfig;
-    private static final long EXPIRATION_MINUTES = 1L;
+    private static final long EXPIRATION_MINUTES = 3L;
     private final UserRepository userRepository;
 
     @Async
