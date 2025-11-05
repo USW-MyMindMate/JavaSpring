@@ -1,5 +1,6 @@
 package com.example.MyMindMate.routine.controller;
 
+import com.example.MyMindMate.global.ApiResponse;
 import com.example.MyMindMate.routine.dto.RoutineRequest;
 import com.example.MyMindMate.routine.dto.RoutineResponse;
 import com.example.MyMindMate.routine.service.RoutineService;
@@ -18,7 +19,8 @@ public class RoutineController {
 
     @PostMapping
     public ResponseEntity<RoutineResponse> createRoutine(@RequestBody RoutineRequest request) {
-        return ResponseEntity.ok(routineService.createRoutine(request));
+        RoutineResponse response = routineService.createRoutine(request);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
@@ -29,9 +31,9 @@ public class RoutineController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRoutine(@PathVariable("id") Long id) {
+    public ResponseEntity<ApiResponse> deleteRoutine(@PathVariable("id") Long id) {
         routineService.deleteRoutine(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(new ApiResponse("루틴이 성공적으로 삭제되었습니다"));
     }
 
     /**

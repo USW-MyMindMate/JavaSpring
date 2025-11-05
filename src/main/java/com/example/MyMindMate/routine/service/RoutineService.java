@@ -2,12 +2,14 @@ package com.example.MyMindMate.routine.service;
 
 import com.example.MyMindMate.member.domain.User;
 import com.example.MyMindMate.member.repository.UserRepository;
+import com.example.MyMindMate.routine.DayOfWeekType;
 import com.example.MyMindMate.routine.Routine;
 import com.example.MyMindMate.routine.RoutineLog;
 import com.example.MyMindMate.routine.dto.RoutineRequest;
 import com.example.MyMindMate.routine.dto.RoutineResponse;
 import com.example.MyMindMate.routine.repository.RoutineLogRepository;
 import com.example.MyMindMate.routine.repository.RoutineRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,42 +29,63 @@ public class RoutineService {
 
     // ------------------- 루틴 CRUD -------------------
     public RoutineResponse createRoutine(RoutineRequest request) {
-        validateRequest(request);
 
+        User childaccount = userRepository.findByAccount(request.getChildAccount())
+                .orElseThrow(() -> new IllegalArgumentException("해당 자녀 계정을 찾을 수 없습니다."));
+
+        // 루틴 생성 및 저장
         Routine routine = Routine.builder()
-                .userId(request.getUserId())
-                .createBy(request.getCreatedBy())
+                .user(childaccount)
                 .title(request.getTitle())
                 .time(LocalTime.parse(request.getTime()))
                 .dayOfWeek(request.getDayOfWeek())
                 .build();
 
-        routine = routineRepository.save(routine);
-        return toResponse(routine);
+        Routine savedRoutine = routineRepository.save(routine);
+
+        // 응답 DTO 변환 후 반환
+        return RoutineResponse.builder()
+                .id(savedRoutine.getId())
+                .childAccount(savedRoutine.getUser().getAccount())
+                .title(savedRoutine.getTitle())
+                .time(savedRoutine.getTime().toString())
+                .dayOfWeek(savedRoutine.getDayOfWeek())
+                .build();
     }
 
     public RoutineResponse updateRoutine(Long id, RoutineRequest request) {
-        validateRequest(request);
 
+        // 1기존 루틴 찾기
         Routine routine = routineRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("루틴을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 루틴을 찾을 수 없습니다."));
 
-        routine = Routine.builder()
-                .id(id)
-                .userId(request.getUserId())
-                .createBy(request.getCreatedBy())
-                .title(request.getTitle())
-                .time(LocalTime.parse(request.getTime()))
-                .dayOfWeek(request.getDayOfWeek())
+        if (request.getTitle() != null) {
+            routine.setTitle(request.getTitle());
+        }
+        if (request.getTime() != null) {
+            routine.setTime(LocalTime.parse(request.getTime()));
+        }
+        if (request.getDayOfWeek() != null) {
+            routine.setDayOfWeek(request.getDayOfWeek());
+        }
+
+        // 4️⃣ DB 반영
+        Routine updatedRoutine = routineRepository.save(routine);
+
+        // 5️⃣ 응답 DTO 변환
+        return RoutineResponse.builder()
+                .id(updatedRoutine.getId())
+                .childAccount(updatedRoutine.getUser().getAccount())
+                .title(updatedRoutine.getTitle())
+                .time(updatedRoutine.getTime().toString())
+                .dayOfWeek(updatedRoutine.getDayOfWeek())
                 .build();
-
-        return toResponse(routineRepository.save(routine));
     }
 
     public void deleteRoutine(Long id) {
         Routine routine = routineRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("삭제할 루틴이 존재하지 않습니다."));
-        routineRepository.deleteById(id);
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 루틴을 찾을 수 없습니다."));
+        routineRepository.delete(routine);
     }
 
     //  account 기반으로 루틴 조회
@@ -98,7 +121,7 @@ public class RoutineService {
                 .id(routine.getId())
                 .title(routine.getTitle())
                 .time(routine.getTime().toString())
-                .dayOfWeek(routine.getDayOfWeek())
+                .dayOfWeek(String.valueOf(routine.getDayOfWeek()))
                 .build();
     }
 
