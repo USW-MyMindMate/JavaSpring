@@ -153,9 +153,12 @@ public class UserService {
     @Transactional
     public ChildProfile createChildProfile(ChildProfileDto dto) {
 
+        log.info("부모계정: {}", dto.getParent_Account());
+
         // 부모 account로 부모 User 찾기
         User parentUser = userRepository.findByAccount(dto.getParent_Account())
                 .orElseThrow(() -> new IllegalArgumentException("부모 계정을 찾을 수 없습니다."));
+
 
         // 자식 User 객체 생성 (나중에 회원으로 승격될 수 있음)
         User childUser = new User();

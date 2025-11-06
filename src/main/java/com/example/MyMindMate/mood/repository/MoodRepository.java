@@ -17,6 +17,11 @@ public interface MoodRepository extends JpaRepository<Mood, Long> {
             "FROM Mood m WHERE m.userId = :userId GROUP BY m.moodTypeName")
     List<MoodStatsResponse> countByMoodTypeNameGrouped(@Param("userId") Long userId);
 
+    // 여러 자녀의 감정 통계 조회
+    @Query("SELECT new com.example.MyMindMate.mood.dto.MoodStatsResponse(m.moodTypeName, COUNT(m)) " +
+            "FROM Mood m WHERE m.userId IN :userIds GROUP BY m.moodTypeName")
+    List<MoodStatsResponse> countByMoodTypeNameGroupedForUserIds(@Param("userIds") List<Long> userIds);
+
     long countByUserIdAndMoodTypeName(Long userId, MoodTypeName moodTypeName);
 
     List<Mood> findTop3ByUserIdOrderByRecordedAtDesc(Long userId);

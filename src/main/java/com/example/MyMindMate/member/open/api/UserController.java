@@ -179,7 +179,7 @@ public class UserController {
 
     // 실제 인증 필드가 true인지 확인하여 이메일 인증을 최종 완료하는 기능
     @GetMapping("/check-verify")
-    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam String email) {
+    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam("email") String email) {
         boolean isVerified = emailTokenService.CheckVerifyEmail(email);
         String message;
         if (isVerified) {
@@ -190,6 +190,7 @@ public class UserController {
         ApiResponse response = new ApiResponse(message, isVerified);
         return ResponseEntity.ok(response);
     }
+
 
     //이메일 재인증
     @PostMapping("/reconfirm-email")
