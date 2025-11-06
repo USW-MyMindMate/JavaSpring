@@ -147,14 +147,14 @@ public class UserController {
     }
     @PostMapping("/child-login")
     public ResponseEntity<ApiResponse> login(@RequestBody Map <String, String> LoginRequest){
-        String account = LoginRequest.get("childAccount");
+        String account = LoginRequest.get("account");
         User user = userService.childLogin(account);
         return ResponseEntity.ok(new ApiResponse(user.getAccount() + "님이 로그인했습니다."));
     }
 
     @PostMapping("/child-logout")
     public ResponseEntity<ApiResponse> logout(@RequestBody Map<String, String> LogoutRequest) {
-        String account = LogoutRequest.get("childAccount");
+        String account = LogoutRequest.get("account");
         userService.childLogout(account);
         return ResponseEntity.ok(new ApiResponse(account + "님이 로그아웃했습니다."));
     }
@@ -222,7 +222,7 @@ public class UserController {
     }
 
     // 부모 account로 자녀 계정 리스트 조회
-    @PostMapping("/find-ChildByParent")
+    @GetMapping("/find-ChildByParent")
     public List<String> findChildByParent(@RequestBody UserDto userDTO) {
         String parentAccount = userDTO.getAccount();
         log.info("부모 계정 조회 요청: {}", parentAccount);

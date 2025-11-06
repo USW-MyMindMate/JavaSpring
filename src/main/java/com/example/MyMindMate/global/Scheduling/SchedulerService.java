@@ -18,7 +18,7 @@ public class SchedulerService {
 
     // 자정 12시가 되면 현재 시간 기준으로 하루가 지난 데이터 삭제
     @Async
-    @Scheduled(cron = "0 0 12 * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void autoDelete() {
 
         LocalDateTime oneDayAgo = LocalDateTime.now().minusDays(1);
