@@ -18,7 +18,8 @@ public class DashboardController {
      */
     @GetMapping("/user")
     public ResponseEntity<DashboardResponse> getDashboard(@RequestParam("account") String account) {
-        return ResponseEntity.ok(dashboardService.getDashboardData(account));
+        DashboardResponse response = dashboardService.getDashboardData(account);
+        return ResponseEntity.ok(response);
     }
 }
 

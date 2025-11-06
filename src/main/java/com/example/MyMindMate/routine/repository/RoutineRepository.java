@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface RoutineRepository extends JpaRepository<Routine, Long> {
     List<Routine> findByUserId(Long userId);
+
+    // 여러 자녀 ID를 한 번에 처리
+    int countByUserIdIn(List<Long> userIds);
 }

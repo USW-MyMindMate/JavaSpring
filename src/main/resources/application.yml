@@ -32,4 +32,5 @@ app:
     mock: true
     path: firebase/mmm_fcm.json
 
+   #url: https://10.140.32.159:8080
 

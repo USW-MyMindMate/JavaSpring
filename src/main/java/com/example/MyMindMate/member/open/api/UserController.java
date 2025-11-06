@@ -179,7 +179,7 @@ public class UserController {
 
     // 실제 인증 필드가 true인지 확인하여 이메일 인증을 최종 완료하는 기능
     @GetMapping("/check-verify")
-    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam String email) {
+    public ResponseEntity<ApiResponse> verifyEmail(@RequestParam("email") String email) {
         boolean isVerified = emailTokenService.CheckVerifyEmail(email);
         String message;
         if (isVerified) {
@@ -190,6 +190,7 @@ public class UserController {
         ApiResponse response = new ApiResponse(message, isVerified);
         return ResponseEntity.ok(response);
     }
+
 
     //이메일 재인증
     @PostMapping("/reconfirm-email")
@@ -222,12 +223,13 @@ public class UserController {
     }
 
     // 부모 account로 자녀 계정 리스트 조회
-    @PostMapping("/find-ChildByParent")
-    public List<String> findChildByParent(@RequestBody UserDto userDTO) {
-        String parentAccount = userDTO.getAccount();
+    @GetMapping("/find-ChildByParent")
+    public List<String> findChildByParent(@RequestParam("account") String parentAccount) {
         log.info("부모 계정 조회 요청: {}", parentAccount);
         return userService.findChildByParent(parentAccount);
     }
+
+
 
 }
 

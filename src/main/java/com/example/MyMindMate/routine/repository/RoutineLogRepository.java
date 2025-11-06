@@ -19,4 +19,7 @@ public interface RoutineLogRepository extends JpaRepository<RoutineLog, Long> {
     Optional<RoutineLog> findByRoutine(Routine routine);
 
     Optional<RoutineLog> findByRoutineIdAndUserId(Long routineId, Long userId); //true,false 가능하게
+
+    // 여러 자녀의 완료된 루틴 로그 카운트
+    long countByUserIdInAndIsCompletedTrue(List<Long> userIds);
 }
