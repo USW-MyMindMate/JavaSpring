@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://3.39.122.126:3306/mymindmateserver?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: jeong
+    password: 1234
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
